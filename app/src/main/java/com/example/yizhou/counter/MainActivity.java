@@ -11,6 +11,7 @@
 
 package com.example.yizhou.counter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -91,15 +92,31 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Start the activity to add a counter
-
-                // update the number_of_counters
-                // number_of_counters =
-                // Then update the title.
-                updateTitle();
-                Log.d("Toolbar",summary_message);
-
+                Intent intent = new Intent(MainActivity.this, CreateCounter.class);
+                startActivityForResult(intent,1);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        switch(requestCode){
+            case 1:
+                if(resultCode == RESULT_OK){
+                    number_of_counters += 1;
+
+                    // get data from the createCounter activity
+                    String newValue = data.getStringExtra("initial_value");
+                    String newName = data.getStringExtra("name");
+                    String newComments = data.getStringExtra("comment");
+
+                    // creating new Counter object
+
+                    // update the title of toolbar
+                    updateTitle();
+                    Log.d("Toolbar",summary_message);
+                }
+        }
     }
 
     /**

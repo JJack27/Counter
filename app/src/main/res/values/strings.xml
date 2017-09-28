@@ -12,4 +12,10 @@
     <string name="grid_current_value">0</string>
     <string name="grid_date">09/27/2017</string>
     <string name="grid_name">counter1</string>
+    <string name="hint_value">0</string>
+    <string name="hint_name">Name</string>
+    <string name="hint_comment">Comments here</string>
+    <string name="tag_value">Initial Value</string>
+    <string name="finish_create">Finish</string>
+
 </resources>

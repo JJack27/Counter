@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2017 Yizhou Zhao, CMPUT 301, University of Alberta. All rights reserved.
+  ~ You may use, distribute, or modify this code under terms and conditirions of the Code of Student Beaviour at University of Alberta.
+  ~ You may find a copy of the license in this project. Otherwise, please contact yizhou4@ualberta.ca.
+  ~
+  -->
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.yizhou.counter.CreateCounter"
+    android:layout_gravity="center">
+
+    <EditText
+        android:id="@+id/initial_value_created"
+        android:layout_width="346dp"
+        android:layout_height="119dp"
+        android:ems="10"
+        android:hint="@string/grid_current_value"
+        android:gravity="center"
+        android:inputType="number"
+        android:textSize="100sp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="32dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="32dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.421"
+        tools:layout_editor_absoluteX="43dp" />
+
+    <EditText
+        android:id="@+id/name_created"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/hint_name"
+        android:inputType="text"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/Comments_created"
+        android:layout_width="215dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:inputType="textMultiLine"
+        android:hint="@string/hint_comment"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/name_created"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tag_value"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/initial_value_created"
+        app:layout_constraintHorizontal_bias="0.503" />
+
+    <Button
+        android:id="@+id/create_finish"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:text="@string/finish_create"
+        android:layout_marginTop="59dp"
+        android:background="@android:color/black"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@+id/Comments_created"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
+</android.support.constraint.ConstraintLayout>

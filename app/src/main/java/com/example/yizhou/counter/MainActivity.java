@@ -28,10 +28,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
-    GridView gridView;
+    public GridView gridView;
     private int number_of_counters = 0;
     private String summary_message;
     private ArrayList<Counters> list_of_counter = new ArrayList<Counters>();
+    private CounterAdapter adapter = new CounterAdapter(this,list_of_counter);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,50 +44,13 @@ public class MainActivity extends AppCompatActivity {
         Counters counter1 = new Counters("counter1", new Date(), 0);
         Counters counter2 = new Counters("counter2", new Date(), 10);
         Log.d("Initializing","Created counters");
-        list_of_counter.add(counter1);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter1);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter2);
-        list_of_counter.add(counter1);
-        list_of_counter.add(counter1);
-        list_of_counter.add(counter1);
-        list_of_counter.add(counter1);
-        list_of_counter.add(counter1);
-        list_of_counter.add(counter1);
-
-
-
 
         // add adapter to grid view
         Log.d("Initializing","Created list");
         gridView = (GridView) findViewById(R.id.list_counter);
-        gridView.setAdapter(new CounterAdapter(this, list_of_counter));
+        gridView.setAdapter(adapter);
 
         setSupportActionBar(toolbar);
-        // hide the menu
-        //View menu = findViewById(R.id.action_settings);
-        //menu.setVisibility(View.INVISIBLE);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,14 +73,34 @@ public class MainActivity extends AppCompatActivity {
                     String newValue = data.getStringExtra("initial_value");
                     String newName = data.getStringExtra("name");
                     String newComments = data.getStringExtra("comment");
+                    Log.d("CreatingCounter","Info got.");
+                    Log.d("CreatingCounter",newValue);
+                    Log.d("CreatingCounter",newName);
+                    Log.d("CreatingCounter",newComments);
 
                     // creating new Counter object
-
+                    Counters counter_created = new Counters(newName,new Date(), Integer.parseInt(newValue), newComments);
+                    // add the new counter object to the list
+                    list_of_counter.add(counter_created);
+                    // update the adapter
+                    CounterAdapter new_adapter = new CounterAdapter(this,list_of_counter);
+                    gridView.setAdapter(new_adapter);
+                    Log.d("CreatingCounter","Added to the list");
                     // update the title of toolbar
                     updateTitle();
+                    Log.d("CreatingCounter","title changed.");
+
                     Log.d("Toolbar",summary_message);
                 }
         }
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        summary_message = number_of_counters + " Counters in total";
+        CollapsingToolbarLayout collapsed_toolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        collapsed_toolbar.setTitle(summary_message);
     }
 
     /**

@@ -22,7 +22,7 @@ import java.util.ArrayList;
  */
 public class CounterAdapter extends BaseAdapter{
     private Context context;
-    private final ArrayList<Counters> counters;
+    private ArrayList<Counters> counters;
 
     public CounterAdapter(Context context, ArrayList<Counters> counters){
         Log.d("CounterAdapter","Creating CounterAdapter");
@@ -32,40 +32,47 @@ public class CounterAdapter extends BaseAdapter{
     }
 
     public View getView(int position, View convertView, ViewGroup parent){
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //LayoutInflater inflater = (LayoutInflater) context
+        //        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View gridView;
+        //View gridView;
 
         if(convertView == null){
-            gridView = new View(context);
+            //gridView = new View(context);
+            LayoutInflater inflater = LayoutInflater.from(context);
 
             // get layout from grids.xml
-            gridView = inflater.inflate(R.layout.grids, null);
+            convertView = inflater.inflate(R.layout.grids, null);
 
             // set value into Textview grid_view_current_value
             Log.d("CounterAdapter","Adding to the first textview");
-            TextView text_current_vlaue = (TextView) gridView.
+            TextView text_current_vlaue = (TextView) convertView.
                     findViewById(R.id.grid_view_current_value);
             text_current_vlaue.setText(String.valueOf(counters.get(position).getCurrent_value()));
 
             // set value into Textview grid_view_name
             Log.d("CounterAdapter","Adding to the 2nd textview");
-            TextView text_name = (TextView) gridView.
+            TextView text_name = (TextView) convertView.
                     findViewById(R.id.grid_view_name);
             Log.d("CounterAdapter",counters.get(position).getName());
             text_name.setText(counters.get(position).getName());
 
             // set value into Textview grid_view)date
             Log.d("CounterAdapter","Adding to the 3rd textview");
-            TextView text_date = (TextView) gridView.
+            TextView text_date = (TextView) convertView.
                     findViewById(R.id.grid_view_date);
             text_date.setText(counters.get(position).getDateString());
 
         }else{
-            gridView = (View) convertView;
+            convertView = (View) convertView;
         }
-        return gridView;
+        return convertView;
+    }
+
+    public void updateAdapter(ArrayList<Counters> newList){
+        counters.clear();
+        counters.addAll(newList);
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -79,6 +86,6 @@ public class CounterAdapter extends BaseAdapter{
     }
     @Override
     public long getItemId(int position){
-        return 0;
+        return position;
     }
 }

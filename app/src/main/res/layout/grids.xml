@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2017 Yizhou Zhao, CMPUT 301, University of Alberta. All rights reserved.
+  ~ You may use, distribute, or modify this code under terms and conditirions of the Code of Student Beaviour at University of Alberta.
+  ~ You may find a copy of the license in this project. Otherwise, please contact yizhou4@ualberta.ca.
+  ~
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/grid_view_current_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/grid_current_value"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/grid_view_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/grid_name"
+        android:textSize="13sp"
+        android:gravity="center"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/grid_view_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/grid_date"
+        android:textSize="10sp"
+        android:gravity="center"
+        android:layout_marginTop="1dp"/>
+
+
+</LinearLayout>

@@ -1,0 +1,15 @@
+<!--
+  ~ Copyright 2017 Yizhou Zhao, CMPUT 301, University of Alberta. All rights reserved.
+  ~ You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+  ~ You may find a copy of the license in this project. Otherwise, please contact yizhou4@ualberta.ca.
+  ~
+  -->
+
+<resources>
+    <string name="app_name">Counter</string>
+    <string name="action_settings">Settings</string>
+    <string name="number_of_counters">0 Counters in total</string>
+    <string name="grid_current_value">0</string>
+    <string name="grid_date">09/27/2017</string>
+    <string name="grid_name">counter1</string>
+</resources>

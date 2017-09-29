@@ -34,11 +34,15 @@ public class CreateCounter extends AppCompatActivity {
                 String name = edit_name.getText().toString();
                 String comment = edit_comment.getText().toString();
                 // validating the input for initial value and name
-                if( initial_value.length() == 0 ) {
+                if( initial_value.length() == 0 ) {     // if there is no input
                     edit_initial_value.setError("Initial value is required!");
                     return;
                 }
-                if(name.length() == 0){
+                if(Integer.parseInt(initial_value) > 99999){
+                    edit_initial_value.setError("Please enter a number less than 10000");
+                    return;
+                }
+                if(name.length() == 0){                 // if the name is empty
                     edit_name.setError("Name is required!");
                     return;
                 }

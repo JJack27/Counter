@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private int number_of_counters = 0;
     private String summary_message;
     private ArrayList<Counters> list_of_counter = new ArrayList<Counters>();
-    private CounterAdapter adapter = new CounterAdapter(this,list_of_counter);
+    private CustomAdapter adapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,15 +41,20 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Log.d("Initializing","Before Create counters");
         // testing data
-        Counters counter1 = new Counters("counter1", new Date(), 0);
-        Counters counter2 = new Counters("counter2", new Date(), 10);
+        for(int i = 0; i < 25; i++){
+           String name= new String(new Integer(i).toString());
+           list_of_counter.add(new Counters(name,new Date(), 0));
+        }
         Log.d("Initializing","Created counters");
 
         // add adapter to grid view
         Log.d("Initializing","Created list");
+        adapter = new CustomAdapter(this, R.layout.grids, list_of_counter);
         gridView = (GridView) findViewById(R.id.list_counter);
         gridView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
+        // initialize the toolbar
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -80,12 +85,16 @@ public class MainActivity extends AppCompatActivity {
 
                     // creating new Counter object
                     Counters counter_created = new Counters(newName,new Date(), Integer.parseInt(newValue), newComments);
+
                     // add the new counter object to the list
                     list_of_counter.add(counter_created);
+                    ArrayList<Counters> newList = new ArrayList<Counters>();
+                    newList.addAll(list_of_counter);
+
                     // update the adapter
-                    CounterAdapter new_adapter = new CounterAdapter(this,list_of_counter);
-                    gridView.setAdapter(new_adapter);
+                    adapter.updateAdapter(newList);
                     Log.d("CreatingCounter","Added to the list");
+
                     // update the title of toolbar
                     updateTitle();
                     Log.d("CreatingCounter","title changed.");
@@ -95,12 +104,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Called when the activity is at the top of the activity stack.
+     */
     @Override
     public void onStart(){
         super.onStart();
         summary_message = number_of_counters + " Counters in total";
         CollapsingToolbarLayout collapsed_toolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         collapsed_toolbar.setTitle(summary_message);
+        Intent intent = new Intent(MainActivity.this, CounterDisplay.class);
+        startActivity(intent);
     }
 
     /**

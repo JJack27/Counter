@@ -7,6 +7,7 @@
 
 package com.example.yizhou.counter;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -16,12 +17,12 @@ import java.util.Date;
  * @see CounterList
  * @since 1.0
  */
-public class Counters {
+public class Counters implements Serializable{
     // Declaring variables
     private String name;
     private Date date;
-    private int current_value;
-    private int initial_value;
+    private int currentValue;
+    private int initialValue;
     private String comment;
 
     // Define methods
@@ -35,8 +36,8 @@ public class Counters {
     public Counters(String name, Date date, int initial_value){
         this.name = name;
         this.date = date;
-        this.initial_value = initial_value;
-        this.current_value = initial_value;
+        this.initialValue = initial_value;
+        this.currentValue = initial_value;
         this.comment = "";
     }
 
@@ -50,8 +51,8 @@ public class Counters {
     public Counters(String name, Date date, int initial_value, String comment){
         this.name = name;
         this.date = date;
-        this.initial_value = initial_value;
-        this.current_value = initial_value;
+        this.initialValue = initial_value;
+        this.currentValue = initial_value;
         this.comment = comment;
     }
 
@@ -97,32 +98,32 @@ public class Counters {
      * Get the current value of the counter
      * @return int: the current value
      */
-    public int getCurrent_value() {
-        return current_value;
+    public int getCurrentValue() {
+        return currentValue;
     }
 
     /**
      * Set the current value of the counter, will update the date of the counter as well
      * @param current_value int: new current value of the counter
      */
-    public void setCurrent_value(int current_value) {
-        this.current_value = current_value;
+    public void setCurrentValue(int current_value) {
+        this.currentValue = current_value;
     }
 
     /**
      * Get the initial_value of the counter
      * @return int: the initial value of the counter
      */
-    public int getInitial_value() {
-        return initial_value;
+    public int getInitialValue() {
+        return initialValue;
     }
 
     /**
      * Set the initial_value of the counter
      * @param initial_value the new initial value of the counter
      */
-    public void setInitial_value(int initial_value) {
-        this.initial_value = initial_value;
+    public void setInitialValue(int initial_value) {
+        this.initialValue = initial_value;
     }
 
     /**
@@ -144,14 +145,14 @@ public class Counters {
     /**
      * Increment the current value of the counter by 1, will update the date of the counter as well
      */
-    public void increase_counter(){
-        this.current_value += 1;
+    public void increaseCounter(){
+        this.currentValue += 1;
     }
 
     /**
      * Decrease the current value of the counter by 1, will update the date of the counter as well
      */
-    public void decrease_counter(){
-        this.current_value -= 1;
+    public void decreaseCounter(){
+        this.currentValue -= 1;
     }
 }

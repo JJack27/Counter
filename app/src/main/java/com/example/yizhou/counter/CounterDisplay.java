@@ -17,6 +17,15 @@ import android.widget.ImageButton;
 
 public class CounterDisplay extends AppCompatActivity implements View.OnClickListener{
 
+    private Counters counter_to_display;
+    private int position;
+    EditText editCurrentValue = (EditText) findViewById(R.id.show_current_vaule);
+    EditText editInitialValue = (EditText) findViewById(R.id.show_initial_value);
+    EditText editName = (EditText) findViewById(R.id.show_name);
+    EditText editComment = (EditText) findViewById(R.id.show_comment);
+    TextView textDate = (TextView) findViewById(R.id.show_date);
+    // still require a textview to represent DATE
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +43,64 @@ public class CounterDisplay extends AppCompatActivity implements View.OnClickLis
         Log.d("Display","Initialized buttons");
 
         // getting data from intent
+        Intent intent = getIntent();
+        position = intent.getExtra("position",0);
+        counter_to_display = intent.getExtra().getSerializableExtra("counter");
 
+        // Initializing editText
+        editCurrentValue.setText(counter_to_display.getCurrentValue());
+        editCurrentName.setText(counter_to_display.getName());
+        editInitialValue.setText(counter_to_display.getInitialValue());
+        editComment.setText(counter_to_display.getComment());
     }
 
     @Override
     public void onClick(View v){
+        int id = v.getId();
+        if(id == R.id.button_increase){
+            // if Increase button is clicked
+            updateDate();
+            counter_to_display.increaseCounter();
+            editCurrentValue.setText(counter_to_display.getCurrentValue);
+            // send a boardcast to the main activity to notify the chage
+            // and save the file.
+            Intent intent = new Intent("com.example.counter.DATA_CHANGED");
+            intent.putExtra("position", position);
+            intent.putExtra("function","increase");
+            sendBroadcast(intent);
+        }else if(id == R.id.button_decrease){
+            // if Decrease button is clicked
+            updateDate();
+            counter_to_display.decreaseCounter();
+            editCurrentValue.setText(counter_to_display.getCurrentValue);
+            // send a boardcast to the main activity to notify the chage
+            // and save the file.
+            Intent intent = new Intent("com.example.counter.DATA_CHANGED");
+            intent.putExtra("position", position);
+            intent.putExtra("function","decrease");
+            sendBroadcast(intent);
+        }else if(id == R.id.button_delete){
+            // if Delete button is clicked
+            Intent intent = new Intent("com.example.counter.DATA_CHANGED");
+            intent.putExtra("function","delete");
+            intent.putExtra("position",position);
+            sendBroadcast(intent);
+            finish();
 
+        }else if(id == R.id.button_reset){
+            // if Reset button is clicked
+            updateDate();
+            counter_to_display.setCurrentValue(counter_to_display.getInitialValue());
+            editCurrentValue.setText(counter_to_display.getCurrentValue);
+            Intent intent = new Intent("com.example.counter.DATA_CHANGED");
+            intent.putExtra("position", position);
+            sendBroadcast(intent);
+        }
+
+    }
+
+    public void updateDate(){
+        counter_to_display.setDate(new Date());
+        textDate.setText(counter_to_display.getStringDate());
     }
 }

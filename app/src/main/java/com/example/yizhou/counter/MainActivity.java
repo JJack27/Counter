@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+/**
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
+**/
     // Function for Broadcast Receiver
     public class CounterBroadcastReceiver extends BroadcastReceiver{
         // For Function: 1 for increase, 2 for decrease, 3 for delete, 4 for reset, 5 for editCurrentvalue

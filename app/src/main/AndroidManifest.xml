@@ -22,6 +22,6 @@
         </activity>
         <activity android:name=".CreateCounter" />
         <activity android:name=".CounterDisplay"></activity>
-
     </application>
+
 </manifest>

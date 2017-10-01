@@ -11,10 +11,7 @@
 
 package com.example.yizhou.counter;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -25,22 +22,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
-import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -51,12 +34,8 @@ public class MainActivity extends AppCompatActivity {
     public GridView gridView;
     private int number_of_counters = 0;
     private String summary_message;
-    protected ArrayList<Counters> list_of_counter = new ArrayList<Counters>();
+    private ArrayList<Counters> list_of_counter = new ArrayList<Counters>();
     private CustomAdapter adapter = null;
-    private IntentFilter intentFilter;
-    private CounterBroadcastReceiver counterBroadcastReceiver;
-    private String FILENAME = new String("file.sav");
-    private boolean loadFile = false;
 
     /**
      * Called when this activity is created
@@ -68,12 +47,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Log.d("Initializing","Before Create counters");
+<<<<<<< HEAD
 
         // initializing broadcast receiver
         intentFilter = new IntentFilter();
         intentFilter.addAction("com.example.yizhou.counter.DATA_CHANGED");
         counterBroadcastReceiver = new CounterBroadcastReceiver();
         registerReceiver(counterBroadcastReceiver, intentFilter);
+=======
+        // testing data
+        for(int i = 0; i < 25; i++){
+           String name= new String(new Integer(i).toString());
+           list_of_counter.add(new Counters(name,new Date(), 0));
+        }
+        Log.d("Initializing","Created counters");
+
+        // add adapter to grid view
+        Log.d("Initializing","Created list");
+        adapter = new CustomAdapter(this, R.layout.grids, list_of_counter);
+        gridView = (GridView) findViewById(R.id.list_counter);
+        gridView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+>>>>>>> parent of 2f40678... Finish!
 
         // initialize the toolbar
         setSupportActionBar(toolbar);
@@ -124,8 +119,9 @@ public class MainActivity extends AppCompatActivity {
 
                     // update the title of toolbar
                     updateTitle();
-                    saveInFile();
-                    loadFromFile();
+                    Log.d("CreatingCounter","title changed.");
+
+                    Log.d("Toolbar",summary_message);
                 }
         }
     }
@@ -136,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
+<<<<<<< HEAD
 
         // load file, only once
         if(!loadFile) {
@@ -172,6 +169,13 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Display", "Intent sent");
             }
         });
+=======
+        summary_message = number_of_counters + " Counters in total";
+        CollapsingToolbarLayout collapsed_toolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        collapsed_toolbar.setTitle(summary_message);
+        Intent intent = new Intent(MainActivity.this, CounterDisplay.class);
+        startActivity(intent);
+>>>>>>> parent of 2f40678... Finish!
     }
 
     /**
@@ -206,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
     }
     */
 
+<<<<<<< HEAD
     // Function for Broadcast Receiver
     public class CounterBroadcastReceiver extends BroadcastReceiver{
         // For Function: 1 for increase, 2 for decrease, 3 for delete, 4 for reset, 5 for editCurrentvalue
@@ -295,4 +300,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+=======
+>>>>>>> parent of 2f40678... Finish!
 }

@@ -46,11 +46,16 @@ public class CreateCounter extends AppCompatActivity {
                     edit_initial_value.setError("Initial value is required!");
                     return;
                 }
+<<<<<<< HEAD
                 if(Integer.parseInt(initial_value) > 99999){    // if the initial value is too large
                     edit_initial_value.setError("Please enter a number less than 100000");
                     return;
                 }else if(Integer.parseInt(initial_value) < 0){  // if the initial value is too small
                     edit_initial_value.setError("Please enter a non-negative number");
+=======
+                if(Integer.parseInt(initial_value) > 99999){
+                    edit_initial_value.setError("Please enter a number less than 10000");
+>>>>>>> parent of 2f40678... Finish!
                     return;
                 }
                 if(name.length() == 0){                         // if the name is empty

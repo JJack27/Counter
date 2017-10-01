@@ -44,6 +44,9 @@ import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * Class that runs the MainActivity
+ */
 public class MainActivity extends AppCompatActivity {
     public GridView gridView;
     private int number_of_counters = 0;
@@ -55,21 +58,22 @@ public class MainActivity extends AppCompatActivity {
     private String FILENAME = new String("file.sav");
     private boolean loadFile = false;
 
+    /**
+     * Called when this activity is created
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Log.d("Initializing","Before Create counters");
-        // testing data
 
         // initializing broadcast receiver
         intentFilter = new IntentFilter();
         intentFilter.addAction("com.example.yizhou.counter.DATA_CHANGED");
         counterBroadcastReceiver = new CounterBroadcastReceiver();
         registerReceiver(counterBroadcastReceiver, intentFilter);
-
-
 
         // initialize the toolbar
         setSupportActionBar(toolbar);
@@ -82,10 +86,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent,1);
             }
         });
-
-
     }
 
+    /**
+     * Called when another activity is finished and returned to this activity
+     * @param requestCode Request code returned by the last activity
+     * @param resultCode Unique code returned initialed in this activity
+     * @param data The date returned from the intent sent from last activity
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         switch(requestCode){
@@ -123,15 +131,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Called when the activity is at the top of the activity stack.
+     * Called when the activity started
      */
     @Override
     public void onStart(){
         super.onStart();
 
+        // load file, only once
         if(!loadFile) {
             loadFromFile();
         }
+
+        // update the summary in tool bar
         summary_message = number_of_counters + " Counters in total";
         CollapsingToolbarLayout collapsed_toolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         collapsed_toolbar.setTitle(summary_message);
@@ -143,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         gridView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        // set item onClickListener
+        // set item onClickListener, when item in the grid view is clicked
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
@@ -153,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Display", new Integer(position).toString());
                 intent.putExtra("position",position);
                 intent.putExtra("initial",counter_send.getInitialValue());
-                intent.putExtra("current",counter_send.getInitialValue());
+                intent.putExtra("current",counter_send.getCurrentValue());
                 intent.putExtra("date",counter_send.getDateString());
                 intent.putExtra("comment",counter_send.getComment());
                 intent.putExtra("name",counter_send.getName());
@@ -161,8 +172,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Display", "Intent sent");
             }
         });
-        //Intent intent = new Intent(MainActivity.this, CounterDisplay.class);
-        //startActivity(intent);
     }
 
     /**
@@ -198,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // Function for Broadcast Receiver
     public class CounterBroadcastReceiver extends BroadcastReceiver{
         // For Function: 1 for increase, 2 for decrease, 3 for delete, 4 for reset, 5 for editCurrentvalue
         // 6 for edit initial value, 7 for edit name, 8 for edit comment
@@ -218,18 +228,23 @@ public class MainActivity extends AppCompatActivity {
                 number_of_counters -= 1;
                 updateTitle();
             }else if(functionReceived == 4){
+                // reset the current value to initial value
                 int initial = list_of_counter.get(positionReceived).getInitialValue();
                 list_of_counter.get(positionReceived).setCurrentValue(initial);
             }else if(functionReceived == 5){
+                // set the current value to new_value
                 int new_value = intent.getIntExtra("current_value",0);
                 list_of_counter.get(positionReceived).setCurrentValue(new_value);
             }else if(functionReceived == 6){
+                // set the initial value to a new_value
                 int new_value = intent.getIntExtra("initial_value",0);
                 list_of_counter.get(positionReceived).setInitialValue(new_value);
             }else if(functionReceived == 7){
+                // set the name to the new name
                 String new_name = intent.getStringExtra("name");
                 list_of_counter.get(positionReceived).setName(new_name);
             }else if(functionReceived == 8){
+                // set the comment to new comment
                 String new_comment = intent.getStringExtra("comment");
                 list_of_counter.get(positionReceived).setComment(new_comment);
             }
@@ -242,6 +257,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method to save the data to file.
+     */
     public void saveInFile(){
         try{
             FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
@@ -257,6 +275,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method to load file
+     */
     public void loadFromFile(){
         try {
             FileInputStream fis = openFileInput(FILENAME);

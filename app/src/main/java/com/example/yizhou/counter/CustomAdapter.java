@@ -21,7 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 /**
- * Created by yizho on 2017/9/28.
+ * A custom adapter that set information of counters to each grid
  */
 
 public class CustomAdapter extends ArrayAdapter<Counters> {
@@ -30,12 +30,26 @@ public class CustomAdapter extends ArrayAdapter<Counters> {
     private int layoutResourceId;
     private ArrayList<Counters> counters = new ArrayList<Counters>();
 
+    /**
+     * Construct a new CustomAdapter
+     * @param context the context of which activity is created
+     * @param resourceId the id of xml file that represent each grid
+     * @param objects the Arraylist of counters
+     */
     public CustomAdapter(Context context, int resourceId, ArrayList<Counters> objects){
         super(context, resourceId, objects);
         this.context = context;
         this.layoutResourceId = resourceId;
         this.counters = objects;
     }
+
+    /**
+     * called when the adapter is setting grid
+     * @param position the position of the counter in the arrayList
+     * @param convertView
+     * @param parent
+     * @return the converted view
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         ViewHolder holder = new ViewHolder();
@@ -60,6 +74,10 @@ public class CustomAdapter extends ArrayAdapter<Counters> {
         return convertView;
     }
 
+    /**
+     * Called when updating the Adapter
+     * @param newList
+     */
     public void updateAdapter(ArrayList<Counters> newList){
         counters.clear();
         counters.addAll(newList);

@@ -73,13 +73,6 @@ public class Counters{
         this.name = name;
     }
 
-    /**
-     * Get the date of the counter
-     * @return a Date object represents the date of the counter
-     */
-    public Date getDate() {
-        return this.date;
-    }
 
     public String getDateString(){
         Date d = this.date;

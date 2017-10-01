@@ -15,13 +15,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+/**
+ * Activity to create a new counter
+ */
 public class CreateCounter extends AppCompatActivity {
 
+    /**
+     * Called when activity is created
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_counter);
 
+        // Initiate the button "finish"
         Button finish_create = (Button) findViewById(R.id.create_finish);
         finish_create.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,18 +42,18 @@ public class CreateCounter extends AppCompatActivity {
                 String name = edit_name.getText().toString();
                 String comment = edit_comment.getText().toString();
                 // validating the input for initial value and name
-                if( initial_value.length() == 0 ) {     // if there is no input
+                if( initial_value.length() == 0 ) {             // if there is no input
                     edit_initial_value.setError("Initial value is required!");
                     return;
                 }
-                if(Integer.parseInt(initial_value) > 99999){
+                if(Integer.parseInt(initial_value) > 99999){    // if the initial value is too large
                     edit_initial_value.setError("Please enter a number less than 100000");
                     return;
-                }else if(Integer.parseInt(initial_value) < 0){
+                }else if(Integer.parseInt(initial_value) < 0){  // if the initial value is too small
                     edit_initial_value.setError("Please enter a non-negative number");
                     return;
                 }
-                if(name.length() == 0){                 // if the name is empty
+                if(name.length() == 0){                         // if the name is empty
                     edit_name.setError("Name is required!");
                     return;
                 }

@@ -72,6 +72,7 @@ public class CounterDisplay extends AppCompatActivity implements View.OnClickLis
         counter_to_display.setComment(intent.getStringExtra("comment"));
         String dateToDisplay = intent.getStringExtra("date");
 
+        // Initializing the data text view
         textDate.setText(dateToDisplay);
         Log.d("Display","Intent data got");
         Log.d("Display",new Integer(counter_to_display.getCurrentValue()).toString());

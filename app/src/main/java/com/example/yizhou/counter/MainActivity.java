@@ -183,9 +183,7 @@ public class MainActivity extends AppCompatActivity {
         collapsed_toolbar.setTitle(summary_message);
     }
 
-
-
-
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -206,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    */
 
     // Function for Broadcast Receiver
     public class CounterBroadcastReceiver extends BroadcastReceiver{

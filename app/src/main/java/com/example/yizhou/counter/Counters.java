@@ -14,10 +14,9 @@ import java.util.Date;
 /**
  * Represents a counter
  * @author Yizhou Zhao
- * @see CounterList
  * @since 1.0
  */
-public class Counters implements Serializable{
+public class Counters{
     // Declaring variables
     private String name;
     private Date date;
@@ -40,6 +39,8 @@ public class Counters implements Serializable{
         this.currentValue = initial_value;
         this.comment = "";
     }
+
+    public Counters(){}
 
     /**
      * Construct a Counter object

@@ -17,6 +17,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * Created by yizho on 2017/9/28.
@@ -52,7 +54,7 @@ public class CustomAdapter extends ArrayAdapter<Counters> {
             holder = (ViewHolder) convertView.getTag();
         }
         Counters counter = counters.get(position);
-        holder.text_initial_value.setText(String.valueOf(counters.get(position).getCurrent_value()));
+        holder.text_initial_value.setText(String.valueOf(counters.get(position).getCurrentValue()));
         holder.text_name.setText(String.valueOf(counters.get(position).getName()));
         holder.text_date.setText(String.valueOf(counters.get(position).getDateString()));
         return convertView;

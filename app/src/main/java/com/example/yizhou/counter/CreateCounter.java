@@ -39,7 +39,10 @@ public class CreateCounter extends AppCompatActivity {
                     return;
                 }
                 if(Integer.parseInt(initial_value) > 99999){
-                    edit_initial_value.setError("Please enter a number less than 10000");
+                    edit_initial_value.setError("Please enter a number less than 100000");
+                    return;
+                }else if(Integer.parseInt(initial_value) < 0){
+                    edit_initial_value.setError("Please enter a non-negative number");
                     return;
                 }
                 if(name.length() == 0){                 // if the name is empty

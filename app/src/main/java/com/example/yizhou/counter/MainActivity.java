@@ -11,7 +11,10 @@
 
 package com.example.yizhou.counter;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -22,8 +25,22 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
+import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -31,8 +48,12 @@ public class MainActivity extends AppCompatActivity {
     public GridView gridView;
     private int number_of_counters = 0;
     private String summary_message;
-    private ArrayList<Counters> list_of_counter = new ArrayList<Counters>();
+    protected ArrayList<Counters> list_of_counter = new ArrayList<Counters>();
     private CustomAdapter adapter = null;
+    private IntentFilter intentFilter;
+    private CounterBroadcastReceiver counterBroadcastReceiver;
+    private String FILENAME = new String("file.sav");
+    private boolean loadFile = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,18 +62,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Log.d("Initializing","Before Create counters");
         // testing data
-        for(int i = 0; i < 25; i++){
-           String name= new String(new Integer(i).toString());
-           list_of_counter.add(new Counters(name,new Date(), 0));
-        }
-        Log.d("Initializing","Created counters");
 
-        // add adapter to grid view
-        Log.d("Initializing","Created list");
-        adapter = new CustomAdapter(this, R.layout.grids, list_of_counter);
-        gridView = (GridView) findViewById(R.id.list_counter);
-        gridView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        // initializing broadcast receiver
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("com.example.yizhou.counter.DATA_CHANGED");
+        counterBroadcastReceiver = new CounterBroadcastReceiver();
+        registerReceiver(counterBroadcastReceiver, intentFilter);
+
+
 
         // initialize the toolbar
         setSupportActionBar(toolbar);
@@ -65,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent,1);
             }
         });
+
+
     }
 
     @Override
@@ -97,9 +116,8 @@ public class MainActivity extends AppCompatActivity {
 
                     // update the title of toolbar
                     updateTitle();
-                    Log.d("CreatingCounter","title changed.");
-
-                    Log.d("Toolbar",summary_message);
+                    saveInFile();
+                    loadFromFile();
                 }
         }
     }
@@ -110,11 +128,41 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
+
+        if(!loadFile) {
+            loadFromFile();
+        }
         summary_message = number_of_counters + " Counters in total";
         CollapsingToolbarLayout collapsed_toolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         collapsed_toolbar.setTitle(summary_message);
-        Intent intent = new Intent(MainActivity.this, CounterDisplay.class);
-        startActivity(intent);
+
+        // add adapter to grid view
+        Log.d("Initializing","Created list");
+        adapter = new CustomAdapter(this, R.layout.grids, list_of_counter);
+        gridView = (GridView) findViewById(R.id.list_counter);
+        gridView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        // set item onClickListener
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                Log.d("Display","preparing intent");
+                Counters counter_send = list_of_counter.get(position);
+                Intent intent = new Intent(MainActivity.this, CounterDisplay.class);
+                Log.d("Display", new Integer(position).toString());
+                intent.putExtra("position",position);
+                intent.putExtra("initial",counter_send.getInitialValue());
+                intent.putExtra("current",counter_send.getInitialValue());
+                intent.putExtra("date",counter_send.getDateString());
+                intent.putExtra("comment",counter_send.getComment());
+                intent.putExtra("name",counter_send.getName());
+                startActivity(intent);
+                Log.d("Display", "Intent sent");
+            }
+        });
+        //Intent intent = new Intent(MainActivity.this, CounterDisplay.class);
+        //startActivity(intent);
     }
 
     /**
@@ -150,4 +198,81 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public class CounterBroadcastReceiver extends BroadcastReceiver{
+        // For Function: 1 for increase, 2 for decrease, 3 for delete, 4 for reset, 5 for editCurrentvalue
+        // 6 for edit initial value, 7 for edit name, 8 for edit comment
+        @Override
+        public void onReceive(Context context, Intent intent){
+            Log.d("Display", "Broadcast received");
+            int positionReceived = intent.getIntExtra("position",0);
+            int functionReceived= intent.getIntExtra("function",0);
+            if(functionReceived == 1){
+                // if increased button is clicked...
+                list_of_counter.get(positionReceived).increaseCounter();
+            }else if(functionReceived == 2){
+                // if decreased button is clicked...
+                list_of_counter.get(positionReceived).decreaseCounter();
+            }else if(functionReceived == 3){
+                // delete the counter
+                list_of_counter.remove(positionReceived);
+                number_of_counters -= 1;
+                updateTitle();
+            }else if(functionReceived == 4){
+                int initial = list_of_counter.get(positionReceived).getInitialValue();
+                list_of_counter.get(positionReceived).setCurrentValue(initial);
+            }else if(functionReceived == 5){
+                int new_value = intent.getIntExtra("current_value",0);
+                list_of_counter.get(positionReceived).setCurrentValue(new_value);
+            }else if(functionReceived == 6){
+                int new_value = intent.getIntExtra("initial_value",0);
+                list_of_counter.get(positionReceived).setInitialValue(new_value);
+            }else if(functionReceived == 7){
+                String new_name = intent.getStringExtra("name");
+                list_of_counter.get(positionReceived).setName(new_name);
+            }else if(functionReceived == 8){
+                String new_comment = intent.getStringExtra("comment");
+                list_of_counter.get(positionReceived).setComment(new_comment);
+            }
+
+            // update the adapter
+            ArrayList<Counters> newList = new ArrayList<Counters>();
+            newList.addAll(list_of_counter);
+            adapter.updateAdapter(newList);
+            saveInFile();
+        }
+    }
+
+    public void saveInFile(){
+        try{
+            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            OutputStreamWriter out = new OutputStreamWriter(fos);
+            Gson gson = new Gson();
+            gson.toJson(list_of_counter, out);
+            out.flush();
+        }catch(FileNotFoundException e){
+            throw new RuntimeException(e);
+        }catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void loadFromFile(){
+        try {
+            FileInputStream fis = openFileInput(FILENAME);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+
+            Gson gson = new Gson();
+            Type listType = new TypeToken<ArrayList<Counters>>(){}.getType();
+            list_of_counter = gson.fromJson(in,listType);
+            number_of_counters = list_of_counter.size();
+            loadFile = true;
+            // read data from gson file
+
+        }catch (FileNotFoundException e) {
+            list_of_counter = new ArrayList<Counters>();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -3,8 +3,8 @@
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
-.DS_Store
 /build
+.DS_Store
 /captures
 .externalNativeBuild
 app/src/main/java/com/example/yizhou/counter/CounterDisplay.java
